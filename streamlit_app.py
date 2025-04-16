@@ -2,9 +2,9 @@ import streamlit as st
 from openai import OpenAI
 
 # Show title and description.
-st.title("💬 Chatbot")
+st.title("💬 SimpleChat")
 st.write(
-    "This is a simple chatbot that uses OpenAI's GPT-3.5 model to generate responses. "
+    "This is a simple chatbot (not to be confused with Simple Jack!) that uses OpenAI's GPT-4.1-mini model to generate responses. "
     "To use this app, you need to provide an OpenAI API key, which you can get [here](https://platform.openai.com/account/api-keys). "
     "You can also learn how to build this app step by step by [following our tutorial](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)."
 )
@@ -25,14 +25,18 @@ else:
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+    st.write("Write your *prompt* below :sunglasses:")
     # Display the existing chat messages via `st.chat_message`.
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
+    
+    
     # Create a chat input field to allow the user to enter a message. This will display
     # automatically at the bottom of the page.
     if prompt := st.chat_input("What is up?"):
+       
 
         # Store and display the current prompt.
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -41,7 +45,7 @@ else:
 
         # Generate a response using the OpenAI API.
         stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1-mini",
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
@@ -54,3 +58,4 @@ else:
         with st.chat_message("assistant"):
             response = st.write_stream(stream)
         st.session_state.messages.append({"role": "assistant", "content": response})
+        
